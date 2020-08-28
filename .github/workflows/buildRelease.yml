@@ -42,7 +42,7 @@ jobs:
         run: python .github/workflows/getSRC.py
 
       - name: Build SNAPHU
-        if: contains(steps.getsrc.outputs.newVersion, True)
+        if: contains(steps.getsrc.outputs.newVersion, 'True')
         shell: msys2 {0}
         run: |
           cd ./snaphu/src
@@ -50,17 +50,17 @@ jobs:
 
 
       - name: Copy msys2.dll to binary directory
-        if: contains(steps.getsrc.outputs.newVersion, True)
+        if: contains(steps.getsrc.outputs.newVersion, 'True')
         shell: msys2 {0}
         run: cp /usr/bin/msys-2.0.dll ./snaphu/src
 
       - name: Zip SNAPHU with compiled exe
-        if: contains(steps.getsrc.outputs.newVersion, True)
+        if: contains(steps.getsrc.outputs.newVersion, 'True')
         run: |
           Compress-Archive snaphu ${{ steps.getsrc.outputs.zipName }}
 
       - name: Create Release
-        if: contains(steps.getsrc.outputs.newVersion, True)
+        if: contains(steps.getsrc.outputs.newVersion, 'True')
         uses: actions/create-release@v1
         id: create_release
         env:
@@ -73,7 +73,7 @@ jobs:
             prerelease: false
 
       - name: Upload program to releases
-        if: contains(steps.getsrc.outputs.newVersion, True)
+        if: contains(steps.getsrc.outputs.newVersion, 'True')
         uses: actions/upload-release-asset@v1.0.2
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
