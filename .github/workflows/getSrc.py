@@ -4,7 +4,8 @@ import re
 import subprocess
 from packaging.version import parse as parse_version
 from pathlib import Path
-
+import tarfile
+import os
 
 url = "https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/"
 
@@ -24,8 +25,11 @@ def parseChangelog():
     latestNotes = parsedNotes[latestVersion].strip().replace("\n", "\\n")
 
     builtVersions = Path("./builds").iterdir()
-    newestbuilt = max((parse_version(version.name) for version in builtVersions))
-    newVersion = True if latestVersion > newestbuilt else False
+    try:
+        newestbuilt = max((parse_version(version.name) for version in builtVersions))
+        newVersion = True if latestVersion > newestbuilt else False
+    except ValueError:
+        newVersion = True
 
     subprocess.Popen(f"echo \"::set-output name=version::{latestVersion}\"", shell=True).wait()
     subprocess.Popen(f"echo \"::set-output name=notes::{latestNotes}\"", shell=True).wait()
@@ -47,6 +51,11 @@ def getSource():
 
     with open("snaphu.tar.gz", "wb") as fileObj:
         fileObj.write(requests.get(downloadLink).content)
+
+    with tarfile.open("snaphu.tar.gz") as tar:
+        tar.extractall()
+
+    os.rename(next(Path(".").glob("snaphu-v*")), "snaphu")
 
 
 if __name__ == "__main__":

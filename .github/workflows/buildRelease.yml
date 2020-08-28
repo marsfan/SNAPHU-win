@@ -41,9 +41,8 @@ jobs:
         id: getsrc
         run: |
           python .github/workflows/getSRC.py
-          mkdir snap
-          tar xzvf snaphu.tar.gz
-          mv snaphu-v* snaphu
+
+      - name: Decompress Source
 
       - name: Build SNAPHU
         if: ${{ steps.getsrc.outputs.newVersion }}
@@ -51,6 +50,7 @@ jobs:
         run: |
           cd ./snaphu/src
           make
+
 
       - name: Copy msys2.dll to binary directory
         if: ${{ steps.getsrc.outputs.newVersion }}
