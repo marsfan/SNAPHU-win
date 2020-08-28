@@ -28,7 +28,7 @@ jobs:
       # Install GCC and Make in MSYS2
       - name: Install MSYS packages
         shell: msys2 {0}
-        run: pacman -Syu gcc make
+        run: pacman -Syu --noconfirm gcc make
 
       # Get the source and unzip it to a new directory.
       - name: Get source
