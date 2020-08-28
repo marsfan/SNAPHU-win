@@ -41,7 +41,7 @@ def parseChangelog():
 
 def getSource():
     downloadRegex = re.compile(
-        r"Download the full source distribution here: *\n<A NAME="SNAPHU" HREF="(snaphu-v[\d\.]+tar\.gz)">snaphu-v[\d\.]+tar\.gz</A>")
+        r"Download the full source distribution here: *\n<A NAME=\"SNAPHU\" HREF=\"(snaphu-v[\d\.]+tar\.gz)\">snaphu-v[\d\.]+tar\.gz</A>")
 
     homePage = requests.get(url).text
 
