@@ -34,14 +34,14 @@ jobs:
       # Get the source and unzip it to a new directory.
       - name: Get source
         run: |
-          python3 .github/workflows/getSRC.py
+          python .github/workflows/getSRC.py
           mkdir snap
           tar xzvf snaphu.tar.gz
           mv snaphu-v* shaphu
 
       - name: Parse Changelog
         id: changelog
-        run: python3 .github/workflows/parseChangelog.py
+        run: python .github/workflows/parseChangelog.py
 
       - name: Build SNAPHU
         shell: msys {0}
