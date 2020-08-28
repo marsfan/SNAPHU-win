@@ -51,7 +51,7 @@ jobs:
         run: python .github/workflows/parseChangelog.py
 
       - name: Build SNAPHU
-        shell: msys {0}
+        shell: msys2 {0}
         run: |
           cd ./snaphu/src
           make
