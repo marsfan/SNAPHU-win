@@ -31,10 +31,10 @@ def parseChangelog():
     except ValueError:
         newVersion = True
 
-    subprocess.Popen(f'echo "::set-output name=version::{latestVersion}"', shell=True).wait()
-    subprocess.Popen(f'echo "::set-output name=notes::{latestNotes}"', shell=True).wait()
-    subprocess.Popen(f'echo "::set-output name=newVersion::{newVersion}"', shell=True).wait()
-    subprocess.Popen(f'echo "::set-output name=zipName::snaphu-v{latestVersion}.zip"', shell=True).wait()
+    print(f'::set-output name=version::{latestVersion}')
+    print(f'::set-output name=notes::{latestNotes}')
+    print(f'::set-output name=newVersion::{newVersion}')
+    print(f'::set-output name=zipName::snaphu-v{latestVersion}.zip')
 
     return newVersion
 
