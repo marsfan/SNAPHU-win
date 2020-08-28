@@ -31,17 +31,17 @@ def parseChangelog():
     except ValueError:
         newVersion = True
 
-    subprocess.Popen(f"echo \"::set-output name=version::{latestVersion}\"", shell=True).wait()
-    subprocess.Popen(f"echo \"::set-output name=notes::{latestNotes}\"", shell=True).wait()
-    subprocess.Popen(f"echo \"::set-output name=newVersion::{newVersion}\"", shell=True).wait()
-    subprocess.Popen(f"echo \"::set-output name=zipName::snaphu-v{latestVersion}.zip\"", shell=True).wait()
+    subprocess.Popen(f'echo "::set-output name=version::{latestVersion}"', shell=True).wait()
+    subprocess.Popen(f'echo "::set-output name=notes::{latestNotes}"', shell=True).wait()
+    subprocess.Popen(f'echo "::set-output name=newVersion::{newVersion}"', shell=True).wait()
+    subprocess.Popen(f'echo "::set-output name=zipName::snaphu-v{latestVersion}.zip"', shell=True).wait()
 
     return newVersion
 
 
 def getSource():
     downloadRegex = re.compile(
-        r"Download the full source distribution here: *\n<A NAME=\"SNAPHU\" HREF=\"(snaphu-v[\d\.]+tar\.gz)\">snaphu-v[\d\.]+tar\.gz</A>")
+        r"Download the full source distribution here: *\n<A NAME="SNAPHU" HREF="(snaphu-v[\d\.]+tar\.gz)">snaphu-v[\d\.]+tar\.gz</A>")
 
     homePage = requests.get(url).text
 
