@@ -27,7 +27,9 @@ jobs:
         with:
           update: true
           install: 'gcc make'
-
+          
+      - name: Setup  Python
+        uses: actions/setup-python@v2
 
       # Get the source and unzip it to a new directory.
       - name: Get source
