@@ -43,7 +43,7 @@ jobs:
           mkdir snap
           tar xzvf snaphu.tar.gz
           mv snaphu-v* shaphu
-          pws
+          pwd
           ls
 
       - name: Parse Changelog
