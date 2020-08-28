@@ -30,6 +30,11 @@ jobs:
           
       - name: Setup  Python
         uses: actions/setup-python@v2
+      
+      - name: Install python requirements
+        run: |
+          python -m pip install pip
+          python -m pip install requests
 
       # Get the source and unzip it to a new directory.
       - name: Get source
