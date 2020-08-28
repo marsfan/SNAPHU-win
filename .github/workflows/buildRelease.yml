@@ -39,10 +39,7 @@ jobs:
       # Get the source and unzip it to a new directory.
       - name: Get source
         id: getsrc
-        run: |
-          python .github/workflows/getSRC.py
-
-      - name: Decompress Source
+        run: python .github/workflows/getSRC.py
 
       - name: Build SNAPHU
         if: ${{ steps.getsrc.outputs.newVersion }}
