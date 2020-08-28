@@ -41,8 +41,6 @@ jobs:
         id: getsrc
         run: python .github/workflows/getSRC.py
 
-      - name: Decompress Source
-
       - name: Build SNAPHU
         if: ${{ steps.getsrc.outputs.newVersion }}
         shell: msys2 {0}
