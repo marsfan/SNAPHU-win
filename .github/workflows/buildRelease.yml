@@ -42,7 +42,7 @@ jobs:
           python .github/workflows/getSRC.py
           mkdir snap
           tar xzvf snaphu.tar.gz
-          mv snaphu-v* shaphu
+          mv snaphu-v* snaphu
           pwd
           ls
 
