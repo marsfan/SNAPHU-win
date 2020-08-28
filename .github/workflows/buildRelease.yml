@@ -27,10 +27,10 @@ jobs:
         with:
           update: true
           install: 'gcc make'
-          
+
       - name: Setup  Python
         uses: actions/setup-python@v2
-      
+
       - name: Install python requirements
         run: |
           python -m pip install pip
@@ -38,50 +38,50 @@ jobs:
 
       # Get the source and unzip it to a new directory.
       - name: Get source
+        id: getsrc
         run: |
           python .github/workflows/getSRC.py
           mkdir snap
           tar xzvf snaphu.tar.gz
           mv snaphu-v* snaphu
-          pwd
-          ls
-
-      - name: Parse Changelog
-        id: changelog
-        run: python .github/workflows/parseChangelog.py
 
       - name: Build SNAPHU
+        if: ${{ steps.getsrc.outputs.newVersion == True }}
         shell: msys2 {0}
         run: |
           cd ./snaphu/src
           make
 
       - name: Copy msys2.dll to binary directory
+        if: ${{ steps.getsrc.outputs.newVersion == True }}
         shell: msys2 {0}
         run: cp /usr/bin/msys-2.0.dll ./snaphu/src
 
       - name: Zip SNAPHU with compiled exe
+        if: ${{ steps.getsrc.outputs.newVersion == True }}
         run: |
-          Compress-Archive snaphu snaphu-v${{ steps.changelog.outputs.version }}.zip
+          Compress-Archive snaphu ${{ steps.getsrc.outputs.zipName }}
 
       - name: Create Release
+        if: ${{ steps.getsrc.outputs.newVersion == True }}
         uses: actions/create-release@v1
         id: create_release
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-            tag_name: v${{ steps.changelog.outputs.version }}
-            release_name: SNAPHU ${{ steps.changelog.outputs.version }}
-            body: ${{ steps.changelog.outputs.notes }}
+            tag_name: ${{ steps.getsrc.outputs.version }}
+            release_name: SNAPHU ${{ steps.getsrc.outputs.version }}
+            body: ${{ steps.getsrc.outputs.notes }}
             draft: true
             prerelease: false
 
       - name: Upload program to releases
+        if: ${{ steps.getsrc.outputs.newVersion == True }}
         uses: actions/upload-release-asset@v1.0.2
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
             asset_path: ./
-            asset_name: snaphu-v${{ steps.changelog.outputs.version }}.zip
+            asset_name: ${{ steps.getsrc.outputs.zipName }}
             asset_content_type: application/zip
