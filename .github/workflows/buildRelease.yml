@@ -50,17 +50,17 @@ jobs:
 
 
       - name: Copy msys2.dll to binary directory
-        if: ${{ steps.getsrc.outputs.newVersion }}
+        if: contains(steps.getsrc.outputs.newVersion, true)
         shell: msys2 {0}
         run: cp /usr/bin/msys-2.0.dll ./snaphu/src
 
       - name: Zip SNAPHU with compiled exe
-        if: ${{ steps.getsrc.outputs.newVersion }}
+        if: contains(steps.getsrc.outputs.newVersion, true)
         run: |
           Compress-Archive snaphu ${{ steps.getsrc.outputs.zipName }}
 
       - name: Create Release
-        if: ${{ steps.getsrc.outputs.newVersion }}
+        if: contains(steps.getsrc.outputs.newVersion, true)
         uses: actions/create-release@v1
         id: create_release
         env:
@@ -73,7 +73,7 @@ jobs:
             prerelease: false
 
       - name: Upload program to releases
-        if: ${{ steps.getsrc.outputs.newVersion }}
+        if: contains(steps.getsrc.outputs.newVersion, true)
         uses: actions/upload-release-asset@v1.0.2
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
