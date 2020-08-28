@@ -40,6 +40,13 @@ jobs:
       - name: Get source
         id: getsrc
         run: python .github/workflows/getSRC.py
+        
+      - name: test
+        run: |
+          echo ${{ steps.getsrc.outputs.version }}
+          echo ${{ steps.getsrc.outputs.notes }}
+          echo ${{ steps.getsrc.outputs.newVersion }}
+          echo ${{ steps.getsrc.outputs.zipName }}
 
       - name: Build SNAPHU
         if: steps.getsrc.outputs.newVersion =='True' 
