@@ -27,7 +27,7 @@ jobs:
 
       # Install GCC and Make in MSYS2
       - name: Install MSYS packages
-        shell: msys2
+        shell: msys2 {0}
         run: pacman -Syu gcc make
 
       # Get the source and unzip it to a new directory.
@@ -43,7 +43,7 @@ jobs:
         run: python3 .github/workflows/parseChangelog.py
 
       - name: Build SNAPHU
-        shell: make
+        shell: msys {0}
         run: |
           cd ./snaphu/src
           make
