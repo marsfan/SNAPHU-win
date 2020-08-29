@@ -42,7 +42,7 @@ def parseChangelog() -> bool:
                                        for foundNote in foundNotes}
     # Get the release notes of the latest version of SNAPHU
     latestVersion = max(parsedNotes)
-    latestNotes = parsedNotes[latestVersion].strip().replace("\n", "\\n")
+    latestNotes = parsedNotes[latestVersion].strip().replace("\n", "%0A")
 
     # Get the highest version number currently tagged in the GitHub repo
     tags = requests.get("https://api.github.com/repos/Marsfan/SNAPHU-win/git/matching-refs/tags").json()
