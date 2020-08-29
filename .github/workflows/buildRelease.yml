@@ -56,7 +56,7 @@ jobs:
       - name: Copy msys2.dll to binary directory
         if: steps.getsrc.outputs.newVersion == 'True'
         shell: msys2 {0}
-        run: cp /usr/bin/msys-2.0.dll ./snaphu/build
+        run: cp /usr/bin/msys-2.0.dll ./snaphu/bin
 
 
       - name: Zip SNAPHU with compiled exe
