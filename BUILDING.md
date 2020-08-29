@@ -1,6 +1,7 @@
 # Build Process
 
-This is the process that I used on a 64bit Windows 10 machine to build SNAPHU for native Windows use.
+This is the process that I used on a 64bit Windows 10 machine to manually build SNAPHU for native Windows use.
+The GitHub Actions script does this exact same process.
 
 1. Download the SNAPHU binaries from [https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/](https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/)
 2. Download and install MSYS2 using the instructions on [https://www.msys2.org/](https://www.msys2.org/)

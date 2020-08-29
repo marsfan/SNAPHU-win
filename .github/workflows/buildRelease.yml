@@ -2,40 +2,45 @@
 
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# FIXME: Change to run once a week before pushing to master
 on:
   push:
     branches: [msys_test]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+    # We want to build for Windows
     runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout this repo
+        uses: actions/checkout@v2
 
-      # Install MSYS2
+      # Install MSYS2, which is used to compile SNAPHU for Windows
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          update: true
-          install: "gcc make"
+          update: true  # Update all of MSYS2's packages
+          install: "gcc make"  # Install make and gcc into MSYS2
 
+      # Python is needed to run the script that downloads the source, and generates the release notes
       - name: Setup  Python
         uses: actions/setup-python@v2
 
+      # The -U argument will update a package if it is already installed
+      # First make sure pip is up to date
+      # Why other packages are included:
+      # Wheel makes installing dependencies eaiser/faster for python
+      # Requests is used to download SNAPHU files, and to get the current tags in this repo (No clue how to do it in yaml)
+      # packaging is used to compare version numbers so that we only build SNAPHU if a new version is installed
       - name: Install python requirements
         run: |
-          python -m pip install pip
-          python -m pip install requests packaging
+          python -m pip install -U pip
+          pythhon -m pip install -U wheel
+          python -m pip install -U requests packaging
 
-      # Get the source and unzip it to a new directory.
+      # Download SNAPHU source code if a new version is available.
+      # Also set GitHub Actions output variables, for user in later steps
       - name: Get source
         id: getsrc
         run: python .github/workflows/getSRC.py
@@ -47,10 +52,12 @@ jobs:
           cd ./snaphu/src
           make
 
+        # Without this step, SNAPHU would not run on a computer without MSYS2 installed
       - name: Copy msys2.dll to binary directory
         if: steps.getsrc.outputs.newVersion == 'True'
         shell: msys2 {0}
         run: cp /usr/bin/msys-2.0.dll ./snaphu/src
+
 
       - name: Zip SNAPHU with compiled exe
         if: steps.getsrc.outputs.newVersion == 'True'
@@ -67,7 +74,7 @@ jobs:
           tag_name: ${{ steps.getsrc.outputs.version }}
           release_name: SNAPHU ${{ steps.getsrc.outputs.version }}
           body: ${{ steps.getsrc.outputs.notes }}
-          draft: true
+          draft: true # FIXME: Change this to false prior to merging to master
           prerelease: false
 
       - name: Upload program to releases
@@ -77,6 +84,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./
+          asset_path: ${{ steps.getsrc.outputs.zipName }}
           asset_name: ${{ steps.getsrc.outputs.zipName }}
           asset_content_type: application/zip
