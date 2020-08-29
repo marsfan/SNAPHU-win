@@ -61,12 +61,11 @@ def parseChangelog() -> bool:
     print(f"::set-output name=newVersion::{newVersion}")
     print(f"::set-output name=zipName::snaphu-v{latestVersion}.zip")
 
-    return True  # FIXME: Replace this with newVersion before merging with master
+    return newVersion
 
 
 def getSource() -> None:
     """Download the source for the newest version of SNAPHU."""
-
 
     # Find SNAPHU download link from the SNAPHU homepage
     homePage = requests.get(url).text

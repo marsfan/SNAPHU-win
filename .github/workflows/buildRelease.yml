@@ -2,10 +2,9 @@
 
 name: CI
 
-# FIXME: Change to run once a week before pushing to master
 on:
-  push:
-    branches: [msys_test]
+  schedule:
+    - cron: '0 0 * * 0'
 
 jobs:
   build:
@@ -74,7 +73,7 @@ jobs:
           tag_name: ${{ steps.getsrc.outputs.version }}
           release_name: SNAPHU ${{ steps.getsrc.outputs.version }}
           body: ${{ steps.getsrc.outputs.notes }}
-          draft: true # FIXME: Change this to false prior to merging to master
+          draft: false
           prerelease: false
 
       - name: Upload program to releases
