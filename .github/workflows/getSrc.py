@@ -10,7 +10,6 @@ import os
 url = "https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/"
 
 
-def getCurrentTag():
 
 
 
