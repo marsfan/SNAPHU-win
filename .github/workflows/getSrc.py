@@ -13,6 +13,9 @@ from pathlib import Path
 import tarfile
 import os
 
+# Get the repository name and owner from the GitHub actions environment variables.
+repoName = os.environ["GITHUB_REPOSITORY"]
+
 # SNAPHU Homepage
 url = "https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/"
 
@@ -45,7 +48,7 @@ def parseChangelog() -> bool:
     latestNotes = parsedNotes[latestVersion].strip().replace("\n", "%0A")
 
     # Get the highest version number currently tagged in the GitHub repo
-    tags = requests.get("https://api.github.com/repos/Marsfan/SNAPHU-win/git/matching-refs/tags").json()
+    tags = requests.get(f"https://api.github.com/repos/{repoName}/git/matching-refs/tags").json()
     parsedVersions: Iterable[Version] = (parse_version(tag["ref"].split("/")[2]) for tag in tags)
     newestBuilt: Version = max(parsedVersions)
 
