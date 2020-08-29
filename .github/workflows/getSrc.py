@@ -10,6 +10,11 @@ import os
 url = "https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/"
 
 
+def getCurrentTag():
+
+
+
+
 def parseChangelog():
     changelogRegex = re.compile(
         r"Notable changes in (v[\d.]+) since (v[\d.]+):\n-*((?:(?!Notable).)*)", flags=re.M | re.S)
@@ -24,12 +29,15 @@ def parseChangelog():
     latestVersion = max(parsedNotes)
     latestNotes = parsedNotes[latestVersion].strip().replace("\n", "\\n")
 
-    builtVersions = Path("./builds").iterdir()
-    try:
-        newestbuilt = max((parse_version(version.name) for version in builtVersions))
-        newVersion = True if latestVersion > newestbuilt else False
-    except ValueError:
-        newVersion = True
+    #builtVersions = Path("./builds").iterdir()
+    #try:
+    #    newestBuilt = max((parse_version(version.name) for version in builtVersions))
+    #    newVersion = True if latestVersion > newestBuilt else False
+    #except ValueError:
+    #    newVersion = True
+    tags = requests.get("https://api.github.com/repos/Marsfan/SNAPHU-win/git/matching-refs/tags").json
+    newestBuilt = max(packaging.version(tag.split('/')[2]) for tag in tags)
+    newVersion = True if latestVersion > newestBuilt else False
 
     print(f"::set-output name=version::{latestVersion}")
     print(f"::set-output name=notes::{latestNotes}")
