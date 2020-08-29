@@ -2,12 +2,11 @@
 
 name: CI
 
-
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
-    branches: [ msys_test ]
+    branches: [msys_test]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,7 +25,7 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           update: true
-          install: 'gcc make'
+          install: "gcc make"
 
       - name: Setup  Python
         uses: actions/setup-python@v2
@@ -40,21 +39,13 @@ jobs:
       - name: Get source
         id: getsrc
         run: python .github/workflows/getSRC.py
-        
-      - name: test
-        run: |
-          echo ${{ steps.getsrc.outputs.version }}
-          echo ${{ steps.getsrc.outputs.notes }}
-          echo ${{ steps.getsrc.outputs.newVersion }}
-          echo ${{ steps.getsrc.outputs.zipName }}
 
       - name: Build SNAPHU
-        if: steps.getsrc.outputs.newVersion =='True' 
+        if: steps.getsrc.outputs.newVersion =='True'
         shell: msys2 {0}
         run: |
           cd ./snaphu/src
           make
-
 
       - name: Copy msys2.dll to binary directory
         if: steps.getsrc.outputs.newVersion == 'True'
@@ -71,21 +62,21 @@ jobs:
         uses: actions/create-release@v1
         id: create_release
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-            tag_name: ${{ steps.getsrc.outputs.version }}
-            release_name: SNAPHU ${{ steps.getsrc.outputs.version }}
-            body: ${{ steps.getsrc.outputs.notes }}
-            draft: true
-            prerelease: false
+          tag_name: ${{ steps.getsrc.outputs.version }}
+          release_name: SNAPHU ${{ steps.getsrc.outputs.version }}
+          body: ${{ steps.getsrc.outputs.notes }}
+          draft: true
+          prerelease: false
 
       - name: Upload program to releases
         if: steps.getsrc.outputs.newVersion == 'True'
         uses: actions/upload-release-asset@v1.0.2
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./
-            asset_name: ${{ steps.getsrc.outputs.zipName }}
-            asset_content_type: application/zip
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./
+          asset_name: ${{ steps.getsrc.outputs.zipName }}
+          asset_content_type: application/zip

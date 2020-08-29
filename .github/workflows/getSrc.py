@@ -31,10 +31,10 @@ def parseChangelog():
     except ValueError:
         newVersion = True
 
-    print(f'::set-output name=version::{latestVersion}')
-    print(f'::set-output name=notes::{latestNotes}')
-    print(f'::set-output name=newVersion::{newVersion}')
-    print(f'::set-output name=zipName::snaphu-v{latestVersion}.zip')
+    print(f"::set-output name=version::{latestVersion}")
+    print(f"::set-output name=notes::{latestNotes}")
+    print(f"::set-output name=newVersion::{newVersion}")
+    print(f"::set-output name=zipName::snaphu-v{latestVersion}.zip")
 
     return newVersion
 
