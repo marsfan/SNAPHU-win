@@ -7,7 +7,7 @@ will respond as soon as possible (less than a week).
 
 SNAPHU is a tool used to unwrap phase images used radar interferometry.
 It is developed by Stanford University, and the full source code can be found here:
-[https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/](https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphuradar/)
+[https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/](https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/)
 
 The Stanford website does not contain pre-compiled binaries of this program. This is normally not a problem, as it can
 be found in many Linux Software Repositories. However, this is not possible on Windows. While the European Space Agency
