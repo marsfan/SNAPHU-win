@@ -17,3 +17,6 @@ It is for a much older version of SNAPHU.
 
 This repository uses GitHub Actions to check the SNAPHU website once a week, and if a new version of SNAPHU has been
 released, it builds it and adds it to the releases pages.
+
+GitHub actions will automatically disable the action if nothing happens for a few months. If this has happend and a new release is available, 
+please open a pull request so that I can re-start the action. 
