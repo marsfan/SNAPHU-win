@@ -43,7 +43,7 @@ jobs:
       # Also set GitHub Actions output variables, for user in later steps
       - name: Get source
         id: getsrc
-        run: python .github/workflows/getSRC.py
+        run: python .github/workflows/get_src.py
 
       - name: Build SNAPHU
         if: steps.getsrc.outputs.newVersion =='True'
