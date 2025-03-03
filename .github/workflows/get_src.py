@@ -15,6 +15,9 @@ from packaging.version import parse as parse_version
 # Get the repository name and owner from the GitHub actions environment variables.
 repo_name = os.environ["GITHUB_REPOSITORY"]
 
+# Github environment file
+gh_env_file = os.environ["GITHUB_OUTPUT"]
+
 # SNAPHU Homepage
 URL = "https://web.stanford.edu/group/radar/softwareandlinks/sw/snaphu/"
 
@@ -31,6 +34,18 @@ changelog_regex = re.compile(
 download_regex = re.compile(
     r"source distribution here: *\n<A NAME=\"SNAPHU\" HREF=\"(snaphu-v[\d\.]+tar\.gz)\">snaphu-v[\d\.]+tar\.gz</A>"
 )
+
+
+def write_to_github_env(name: str, value: str) -> None:
+    """Write a new value to the github environment file.
+
+    Arguments:
+        name: The name of the environment variable to write
+        value: The value of the environment variable.
+
+    """
+    with open(gh_env_file, "a", encoding="utf-8") as file:
+        file.write(f"{name}={value}\n")
 
 
 def parse_changelog() -> bool:
@@ -62,10 +77,10 @@ def parse_changelog() -> bool:
     new_version = latest_version > newest_built
 
     # Set GitHub actions output values for use in later steps.
-    print(f"::set-output name=version::{latest_version}")
-    print(f"::set-output name=notes::{latest_notes}")
-    print(f"::set-output name=newVersion::{new_version}")
-    print(f"::set-output name=zipName::snaphu-v{latest_version}.zip")
+    write_to_github_env("version", str(latest_version))
+    write_to_github_env("notes", latest_notes)
+    write_to_github_env("newVersion", str(new_version))
+    write_to_github_env("zipName", f"snaphu-v{latest_version}.zip")
 
     return new_version
 
