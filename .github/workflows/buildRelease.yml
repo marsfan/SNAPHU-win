@@ -55,7 +55,7 @@ jobs:
 
       # Second build, this time enabling the AVX2 SIMD instructions
       - name: Build SNAPHU with AVX2
-        if: steps.getsrc.outcome.newVersion == 'True'
+        if: steps.getsrc.outputs.newVersion == 'True'
         shell: msys2 {0}
         run: |
           mkdir ./snaphu/bin_avx
