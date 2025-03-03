@@ -58,6 +58,7 @@ jobs:
         if: steps.getsrc.outcome.newVersion == 'True'
         shell: msys2 {0}
         run: |
+          mkdir ./snaphu/bin_avx
           cd ./snaphu/src
           make clean
           make OPTIMFLAGS="-O3 -mavx2" BINDIR="../bin_avx" -j
