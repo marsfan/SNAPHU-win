@@ -109,6 +109,13 @@ def get_source() -> None:
     # Rename the folder that we just unzipped to make running later actions eaiser.
     os.rename(next(Path(".").glob("snaphu-v*")), "snaphu")
 
+    # Remove the -arch flag from the makefile, since this compiler does not
+    # support it.
+    makefile = Path("snaphu/src/Makefile")
+    patched = makefile.read_text(
+        "utf-8").replace("-arch x86_64 ", "-march=x86-64")
+    makefile.write_text(patched, "utf-8")
+
 
 if __name__ == "__main__":
     if parse_changelog():
