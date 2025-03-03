@@ -46,17 +46,29 @@ jobs:
         run: python .github/workflows/get_src.py
 
       - name: Build SNAPHU
-        if: steps.getsrc.outputs.newVersion =='True'
+        if: steps.getsrc.outputs.newVersion == 'True'
         shell: msys2 {0}
         run: |
           cd ./snaphu/src
-          make
+          make -j
+
+
+      # Second build, this time enabling the AVX2 SIMD instructions
+      - name: Build SNAPHU with AVX2
+        if: steps.getsrc.outcome.newVersion == 'True'
+        shell: msys2 {0}
+        run: |
+          cd ./snaphu/src
+          make clean
+          make OPTIMFLAGS="-O3 -mavx2" BINDIR="../bin_avx" -j
 
         # Without this step, SNAPHU would not run on a computer without MSYS2 installed
-      - name: Copy msys2.dll to binary directory
+      - name: Copy msys2.dll to binary directories
         if: steps.getsrc.outputs.newVersion == 'True'
         shell: msys2 {0}
-        run: cp /usr/bin/msys-2.0.dll ./snaphu/bin
+        run: |
+          cp /usr/bin/msys-2.0.dll ./snaphu/bin
+          cp /usr/bin/msys-2.0.dll ./snaphu/bin_avx
 
 
       - name: Zip SNAPHU with compiled exe
