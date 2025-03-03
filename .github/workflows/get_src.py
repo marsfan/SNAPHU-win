@@ -113,7 +113,7 @@ def get_source() -> None:
     # support it.
     makefile = Path("snaphu/src/Makefile")
     patched = makefile.read_text(
-        "utf-8").replace("-arch x86_64 ", "-march=x86-64")
+        "utf-8").replace("-arch x86_64 ", "-march=x86-64 ")
     makefile.write_text(patched, "utf-8")
 
 
